@@ -1,0 +1,47 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">🎙️ 文本转语音</text>
+    <text class="subtitle">基于火山引擎豆包 TTS</text>
+  </view>
+
+  <view class="input-section">
+    <textarea 
+      class="text-input" 
+      placeholder="请输入要转换为语音的文本..."
+      maxlength="5000"
+      bindinput="onInput"
+      value="{{text}}"
+    />
+    <text class="char-count">{{text.length}}/5000</text>
+  </view>
+
+  <view class="control-section">
+    <view class="control-item">
+      <text class="label">音色</text>
+      <picker bindchange="onVoiceChange" value="{{voiceIndex}}" range="{{voices}}" range-key="name">
+        <view class="picker">{{voices[voiceIndex].name}}</view>
+      </picker>
+    </view>
+
+    <view class="control-item">
+      <text class="label">语速</text>
+      <slider min="0.5" max="2.0" step="0.1" value="{{speed}}" bindchange="onSpeedChange" show-value/>
+    </view>
+
+    <view class="control-item">
+      <text class="label">音量</text>
+      <slider min="0.1" max="2.0" step="0.1" value="{{volume}}" bindchange="onVolumeChange" show-value/>
+    </view>
+  </view>
+
+  <button class="generate-btn" type="primary" bindtap="generateTTS" loading="{{loading}}" disabled="{{loading || !text}}">
+    {{loading ? '生成中...' : '🎵 生成音频'}}
+  </button>
+
+  <view class="result-section" wx:if="{{audioUrl}}">
+    <text class="result-title">🎉 生成成功</text>
+    <audio src="{{audioUrl}}" controls class="audio-player"></audio>
+    <button class="download-btn" bindtap="downloadAudio">⬇️ 保存音频</button>
+  </view>
+</view>
